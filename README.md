@@ -8,6 +8,8 @@ If you're not interested into the why, you can directly jump to the next questio
 
 The Color class extends the [@creenv/vector Vector](https://github.com/bcrespy/creenv-color) class, which means any operations over the vectors can be applied between colors. However, you may want to be carefull with the alpha channel. It is stored as a regular component, so operations could alter it's value. This is probably a design issue and will change in the future.
 
+**APRES LE CALL DE SUPER(), FAIRE .DIMENSIONS=3 ?**
+
 While using the Creative Environment and some of its modules, using the Color class will allow other components to process the data faster. For instance, if you provide a Color object to a controller of [@creenv/gui GUI](https://github.com/bcrespy/creenv-gui), it will automatically understand that this is a colro provided, and will not have to execute computations to understand if weither a string #040404 is a color or not. 
 
 Moreover, it gives you the ability, for a given color, to be used in many different manners without the need of transformations. If you want to change the active color of the native canvas API, just do like so: 
