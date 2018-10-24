@@ -111,34 +111,80 @@ console.log(color.hsl); // [300, 100, 0.5]
 ```
 ___
 
-### static fromHSL (**h**: *number*, **s**: *number*, **l**: *number*): *Color*
+### *static* fromHSL (**h**: *number*, **s**: *number*, **l**: *number*): *Color*
 
 Returns a new **Color**, with rgb components, given the HSL components in arguments.
 
+| Name | Type | Definition | Default |
+| ---- | ---- | ---------- | ------- |
+| **h** | *number* | The hue component, in the [0;360] range | |
+| **s** | *number* | The saturation component, in the [0;1] range | |
+| **l** | *number* | The luminosity component, in the [0;1] range | |
+
+```js
+// example 
+let color = Color.fromHSL(341,0.91,0.58); // arround [245, 50, 112, 1]
+```
 ___
 
-### static fromHSV (**h**: *number*, **s**: *number*, **v**: *number*)
+### *static* fromHSV (**h**: *number*, **s**: *number*, **v**: *number*)
 
 Returns a new **Color**, with rgb components, given the HSV components in arguments.
 
+| Name | Type | Definition | Default |
+| ---- | ---- | ---------- | ------- |
+| **h** | *number* | The hue component, in the [0;360] range | |
+| **s** | *number* | The saturation component, in the [0;1] range | |
+| **v** | *number* | The value component, in the [0;1] range | |
+
+```js
+// example 
+let color = Color.fromHSV(320,0.50,0.40); // arround [102, 51, 85, 1]
+```
 ___
 
-### static fromString (colorString)
+### *static* fromString (colorString)
 
 Returns a new **Color** from any css compliant string. [W3C color specs](https://www.w3.org/TR/2018/REC-css-color-3-20180619/)
 
+| Name | Type | Definition | Default |
+| ---- | ---- | ---------- | ------- |
+| **colorString** | *string* | The string representation of a color, must be css compliant | |
+
+```js
+// example 
+let color = Color.fromString("#f5336f");
+let color = Color.fromString("rgb(25, 50, 30");
+```
 ___
 
-### static fromColor (color)
+### *static* fromColor (color)
 
-Returns a new **Color**, copy of **color** in arguments. #Duplicate of **color.copy()**
+Returns a new **Color** which components are the same as the **color** argument. #Duplicate of **color.copy()**
 
+| Name | Type | Definition | Default |
+| ---- | ---- | ---------- | ------- |
+| **color** | *Color* | The *Color* object to copy components from | |
+
+```js
+// example
+let red = new Color(255,0,0);
+let red2 = Color.fromColor(red); // [255, 0, 0, 1]
+```
 ___
 
-### static fromArray (components)
+### *static* fromArray (components)
 
 Returns a new color, from an array of 3 or 4 components, [r, g, b, ?a].
 
+| Name | Type | Definition | Default |
+| ---- | ---- | ---------- | ------- |
+| **components** | *Array.\<number\>* | A 3 or 4 dimensions array to create the color object from. [r; g; b; a] | |
+
+```js
+// example
+let color = Color.fromArray([25, 50, 78, 0.8]);
+```
 ___
 
 ### toArray ()
@@ -157,30 +203,88 @@ ___
 
 Returns a **new** Color which as the same components, but rounded.
 
+```js
+// example 
+let color = new Color(212.48, 78.458, 74.51, 0.78);
+let c2 = color.rounded();
+
+console.log(color.components); // expected output: [212.48, 78.458, 74.51, 0.78]
+console.log(c2.components); // expected output: [212, 75, 75, 0.78]
+```
 ___
 
 ### apply (func, alpha = false)
 
 Applies a function **func** to all the components of the color, except alpha if **alpha** argument is set to false.
 
+| Name | Type | Definition | Default |
+| ---- | ---- | ---------- | ------- |
+| **func** | *function* | A function respecting the form f(x) => x, takes a number as first and only argument and returns a number. | x => x |
+| **alpha** | *boolean* | Weither the function will be applied to the alpha component or not | false |
+
+**@Returns** this, can be used to chain operations
+
+```js
+// example
+let color = new Color(25.5, 30.75, 19.99, 0.55);
+color.apply(Math.floor);
+
+console.log(color); // expected output: [25, 30, 19, 0.55]
+```
 ___
 
 ### convert (Class, func = x => x)
 
 Converts the Color class to any other Class which accepts 4 arguments: red, green, blue, alpha. Can be useful if a tierce library only accepts its own Classes. If specified, the function **func** will be applied to all the components.
 
+| Name | Type | Definition | Default |
+| ---- | ---- | ---------- | ------- |
+| **Clas** | *class* | A javascript class, 3 or 4 arguments at instanciation | |
+| **func** | *function* | A function that will be applied to the components as they are passed as arguments to the constructor of **Class** | x => x |
+
+```js
+// example
+let color = new Color(14, 15, 150);
+
+import Vector3 from "three"; // for the example we'll import vector3 from three js
+
+let vect = color.convert(Vector3); // same as new Vector3(color.r, color.g, color.b);
+```
 ___
 
 ### interpolateWith (endColor, t)
 
 Linear interpolation of all the components between this and **endColor**, **t** in range of [0;1] 
 
+| Name | Type | Definition | Default |
+| ---- | ---- | ---------- | ------- |
+| **endColor** | *Color* | The right end color | |
+| **t** | *number* | The interpolation factor. 0 = this, 1 = endColor | |
+
+**@Returns** this, can be used to chain operations
+
+```js 
+// example 
+let c1 = new Color(0,0,0);
+let c2 = new Color(255,255,255);
+c1.interpolateWith(c2, 0.5);
+
+console.log(c1.components); // expected ouput: [128, 128, 128, 1]
+```
 ___
 
 ### invert () 
 
-Inversion of the color
+Inversion of all the components of the color but alpha 
 
+**@Returns** this, can be used to chain operations
+
+```js 
+// example 
+let c1 = new Color(0,0,0);
+c1.invert();
+console.log(cA.components); // expected ouput: [255,255,255, 1]
+```
 ___
 
 ### grayscale ()
